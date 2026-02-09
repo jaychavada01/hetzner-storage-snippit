@@ -1,5 +1,5 @@
 const { DataTypes } = require("sequelize");
-const { sequelize } = require("../../config/sequelize");
+const { sequelize } = require("../../config/database");
 const { models } = require("../../config/models");
 
 const Media = sequelize.define(
@@ -66,11 +66,6 @@ const Media = sequelize.define(
     },
     user_id: {
       type: DataTypes.UUID,
-      allowNull: true,
-    },
-    // Public storage (populated when context = feed)
-    publicUrl: {
-      type: DataTypes.TEXT,
       allowNull: true,
     },
 

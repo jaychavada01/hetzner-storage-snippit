@@ -1,12 +1,12 @@
-require("dotenv").config();
-
+const RegisterRouter = require("./api/routes");
 const { HTTP_STATUS_CODE } = require("./config/constants");
 const { checkDBConnection } = require("./config/database");
+const envConfig = require("./config/envConfig");
 const { EXPRESS, CORS, FS } = require("./config/packages");
 
 // EXPRESS APP SETUP
 const app = EXPRESS();
-const PORT = process.env.PORT || 1338;
+const PORT = envConfig.SERVER.PORT || 1338;
 
 // Middleware
 app.use(CORS());
@@ -28,6 +28,7 @@ app.get("/health", (req, res) => {
 });
 
 // Routes
+app.use(RegisterRouter);
 
 // Start server
 app.listen(PORT, async () => {

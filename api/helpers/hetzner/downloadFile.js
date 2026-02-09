@@ -1,15 +1,5 @@
-const AWS = require("aws-sdk");
-const { HETZNER_STORAGE } = require("../../../config/constants");
-
-// S3 CLIENT - PRIVATE BUCKET
-const s3 = new AWS.S3({
-  endpoint: HETZNER_STORAGE.ENDPOINT,
-  region: HETZNER_STORAGE.REGION,
-  accessKeyId: HETZNER_STORAGE.ACCESS_KEY,
-  secretAccessKey: HETZNER_STORAGE.SECRET_KEY,
-  s3ForcePathStyle: true,
-  signatureVersion: "v4",
-});
+const envConfig = require("../../../config/envConfig");
+const s3Utils = require("../../utils/s3Utils");
 
 /**
  * Download file from private bucket
@@ -20,20 +10,20 @@ const downloadFile = async ({ sourceFilePath }) => {
 
     // Check if file exists
     try {
-      await s3
+      await s3Utils
         .headObject({
-          Bucket: HETZNER_STORAGE.BUCKET,
+          Bucket: envConfig.STORAGE.BUCKET,
           Key: resolvedKey,
         })
         .promise();
     } catch (headError) {
       if (headError.code === "NotFound") {
         // Fallback: try with bucket prefix
-        const bucketPrefixed = `${HETZNER_STORAGE.BUCKET}/${sourceFilePath}`;
+        const bucketPrefixed = `${envConfig.STORAGE.BUCKET}/${sourceFilePath}`;
         try {
-          await s3
+          await s3Utils
             .headObject({
-              Bucket: HETZNER_STORAGE.BUCKET,
+              Bucket: envConfig.STORAGE.BUCKET,
               Key: bucketPrefixed,
             })
             .promise();
@@ -53,9 +43,9 @@ const downloadFile = async ({ sourceFilePath }) => {
     }
 
     // Download file
-    const downloadResult = await s3
+    const downloadResult = await s3Utils
       .getObject({
-        Bucket: HETZNER_STORAGE.BUCKET,
+        Bucket: envConfig.STORAGE.BUCKET,
         Key: resolvedKey,
       })
       .promise();

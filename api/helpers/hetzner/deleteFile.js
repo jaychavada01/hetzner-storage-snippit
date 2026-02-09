@@ -1,15 +1,5 @@
-const AWS = require("aws-sdk");
-const { HETZNER_STORAGE } = require("../../../config/constants");
-
-// S3 CLIENT - PRIVATE BUCKET
-const s3 = new AWS.S3({
-  endpoint: HETZNER_STORAGE.ENDPOINT,
-  region: HETZNER_STORAGE.REGION,
-  accessKeyId: HETZNER_STORAGE.ACCESS_KEY,
-  secretAccessKey: HETZNER_STORAGE.SECRET_KEY,
-  s3ForcePathStyle: true,
-  signatureVersion: "v4",
-});
+const envConfig = require("../../../config/envConfig");
+const s3Utils = require("../../utils/s3Utils");
 
 /**
  * Delete file from private bucket
@@ -18,9 +8,9 @@ const deleteFile = async ({ filePath }) => {
   try {
     // Check if file exists
     try {
-      await s3
+      await s3Utils
         .headObject({
-          Bucket: HETZNER_STORAGE.BUCKET,
+          Bucket: envConfig.STORAGE.BUCKET,
           Key: filePath,
         })
         .promise();
@@ -35,9 +25,9 @@ const deleteFile = async ({ filePath }) => {
     }
 
     // Delete file from storage
-    await s3
+    await s3Utils
       .deleteObject({
-        Bucket: HETZNER_STORAGE.BUCKET,
+        Bucket: envConfig.STORAGE.BUCKET,
         Key: filePath,
       })
       .promise();

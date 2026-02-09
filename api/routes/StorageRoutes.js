@@ -1,9 +1,8 @@
 const express = require("express");
 const multer = require("multer");
+const StorageController = require("../controllers/StorageController");
 
-const StorageController = require("../controllers/storage.controller");
-
-const router = express.Router();
+const storageRouter = express.Router();
 
 // Multer config
 const upload = multer({
@@ -14,15 +13,25 @@ const upload = multer({
 });
 
 // Upload single file
-router.post("/upload", upload.single("file"), StorageController.uploadFile);
+storageRouter.post(
+  "/upload",
+  upload.single("file"),
+  StorageController.uploadFile,
+);
+
+storageRouter.post(
+  "/upload/multiple",
+  upload.array("files", 20), // max 20 files
+  StorageController.uploadMultipleFiles,
+);
 
 // Generate signed URL
-router.post("/generate-signed-url", StorageController.generateSignedUrl);
+storageRouter.post("/generate-signed-url", StorageController.generateSignedUrl);
 
 // Download file
-router.get("/download", StorageController.downloadFile);
+storageRouter.get("/download", StorageController.downloadFile);
 
 // Delete file
-router.delete("/:mediaId", StorageController.deleteFile);
+storageRouter.delete("/delete", StorageController.deleteFile);
 
-module.exports = router;
+module.exports = storageRouter;

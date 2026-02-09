@@ -1,7 +1,8 @@
 const { Sequelize } = require("sequelize");
+const envConfig = require("./envConfig");
 
 // DATABASE CONNECTION (URL BASED)
-const sequelize = new Sequelize(process.env.DATABASE_URL, {
+const sequelize = new Sequelize(envConfig.DATABASE.URL, {
   dialect: "postgres",
   logging: false,
   pool: {

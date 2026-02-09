@@ -1,31 +1,16 @@
-const {
-  HETZNER_STORAGE,
-  FILE_CONSTANTS,
-} = require("../../../config/constants");
-
-const AWS = require("aws-sdk");
 const SHARP = require("sharp");
 const UUID = require("uuid").v4;
-
+const { FILE_CONSTANTS } = require("../../../config/constants");
 const { promisify } = require("util");
 const { readFile, unlink } = require("fs");
 const {
   getContentTypeByExtension,
   isThumbnailEligible,
-} = require("../../../../utils/fileUtils");
-
+} = require("../../utils/fileUtils");
+const envConfig = require("../../../config/envConfig");
+const s3Utils = require("../../utils/s3Utils");
 const readFileAsync = promisify(readFile);
 const unlinkAsync = promisify(unlink);
-
-// S3 CLIENT - PRIVATE BUCKET
-const s3 = new AWS.S3({
-  endpoint: HETZNER_STORAGE.ENDPOINT,
-  region: HETZNER_STORAGE.REGION,
-  accessKeyId: HETZNER_STORAGE.ACCESS_KEY,
-  secretAccessKey: HETZNER_STORAGE.SECRET_KEY,
-  s3ForcePathStyle: true,
-  signatureVersion: "v4",
-});
 
 /**
  * Upload file to private bucket with optional thumbnail generation
@@ -47,13 +32,13 @@ const uploadFile = async ({
 
     // Upload to private bucket
     const uploadParams = {
-      Bucket: HETZNER_STORAGE.BUCKET,
+      Bucket: envConfig.STORAGE.BUCKET,
       Key: key,
       Body: fileContent,
       ContentType: getContentTypeByExtension(fileExtension),
     };
 
-    const uploadResult = await s3.upload(uploadParams).promise();
+    const uploadResult = await s3Utils.upload(uploadParams).promise();
 
     // Generate thumbnail if requested and file is image
     let thumbnailData = null;
@@ -90,9 +75,9 @@ const uploadFile = async ({
           FILE_CONSTANTS.THUMBNAIL.FORMAT
         }`;
 
-        await s3
+        await s3Utils
           .upload({
-            Bucket: HETZNER_STORAGE.BUCKET,
+            Bucket: envConfig.STORAGE.BUCKET,
             Key: thumbKey,
             Body: thumbBuffer,
             ContentType: FILE_CONSTANTS.THUMBNAIL.CONTENT_TYPE,
@@ -103,12 +88,12 @@ const uploadFile = async ({
         const metadata = await SHARP(thumbBuffer).metadata();
 
         // Construct thumbnail URL
-        const endpoint = HETZNER_STORAGE.ENDPOINT.endsWith("/")
-          ? HETZNER_STORAGE.ENDPOINT.slice(0, -1)
-          : HETZNER_STORAGE.ENDPOINT;
+        const endpoint = envConfig.STORAGE.ENDPOINT.endsWith("/")
+          ? envConfig.STORAGE.ENDPOINT.slice(0, -1)
+          : envConfig.STORAGE.ENDPOINT;
 
         thumbnailData = {
-          url: `${endpoint}/${HETZNER_STORAGE.BUCKET}/${thumbKey}`,
+          url: `${endpoint}/${envConfig.STORAGE.BUCKET}/${thumbKey}`,
           key: thumbKey,
           fileName: thumbKey.split("/").pop(),
           width: metadata.width || null,

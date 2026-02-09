@@ -1,19 +1,6 @@
-const {
-  HETZNER_STORAGE,
-  SIGNED_URL_EXPIRY,
-} = require("../../../config/constants");
-const AWS = require("aws-sdk");
-
-// S3 CLIENT - PRIVATE BUCKET
-
-const s3 = new AWS.S3({
-  endpoint: HETZNER_STORAGE.ENDPOINT,
-  region: HETZNER_STORAGE.REGION,
-  accessKeyId: HETZNER_STORAGE.ACCESS_KEY,
-  secretAccessKey: HETZNER_STORAGE.SECRET_KEY,
-  s3ForcePathStyle: true,
-  signatureVersion: "v4",
-});
+const { SIGNED_URL_EXPIRY } = require("../../../config/constants");
+const envConfig = require("../../../config/envConfig");
+const s3Utils = require("../../utils/s3Utils");
 
 /**
  * Generate signed URL from file path
@@ -27,8 +14,8 @@ const generateSignedUrl = async ({
 }) => {
   try {
     // Generate signed URL with specified or default expiry
-    const signedUrl = s3.getSignedUrl("getObject", {
-      Bucket: HETZNER_STORAGE.BUCKET,
+    const signedUrl = s3Utils.getSignedUrl("getObject", {
+      Bucket: envConfig.STORAGE.BUCKET,
       Key: filePath,
       Expires: expiresIn || SIGNED_URL_EXPIRY.TWO_HOURS,
       ResponseContentType: contentType,
