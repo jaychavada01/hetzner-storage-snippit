@@ -1,0 +1,50 @@
+{
+  "media": {
+    "upload": {
+      "success": "File uploaded successfully",
+      "error": "Failed to upload file",
+      "invalidType": "Invalid file type. Only {{types}} are allowed",
+      "folderRequired": "Folder name is required",
+      "typeRequired": "File type is required",
+      "fileRequired": "File is required",
+      "invalidFileType": "Invalid file type. Must be 'image' or 'video'",
+      "multipartFailed": "Multipart upload failed"
+    },
+    "bulkUpload": {
+      "success": "{{count}} files uploaded successfully",
+      "error": "Failed to upload files",
+      "maxFilesExceeded": "Maximum {{max}} files allowed",
+      "noFiles": "No files provided",
+      "partialSuccess": "{{success}} files uploaded, {{failed}} failed"
+    },
+    "delete": {
+      "success": "File deleted successfully",
+      "error": "Failed to delete file",
+      "keyRequired": "File key is required",
+      "notFound": "File not found"
+    },
+    "download": {
+      "success": "File downloaded successfully",
+      "error": "Failed to download file",
+      "keyRequired": "File key is required",
+      "notFound": "File not found",
+      "streamError": "Error streaming file"
+    },
+    "validation": {
+      "invalidRequest": "Invalid request parameters",
+      "fileTooLarge": "File size exceeds maximum limit"
+    },
+    "errors": {
+      "internalError": "Internal server error occurred",
+      "s3Error": "Storage service error",
+      "invalidKey": "Invalid file key format"
+    }
+  },
+  "feed": {
+    "success": "Feed retrieved successfully",
+    "error": "Failed to retrieve feed",
+    "postNotFound": "Post not found",
+    "postRetrieved": "Post retrieved successfully",
+    "userGallery": "User gallery retrieved successfully"
+  }
+}

@@ -51,8 +51,29 @@ const SIGNED_URL_EXPIRY = {
   TWO_HOURS: 7200, // 2 hours in seconds
 };
 
+// MEDIA MODULE CONSTANTS
+const MEDIA_CONSTANTS = {
+  MULTIPART_CHUNK_SIZE: 5 * 1024 * 1024, // 5MB
+  MAX_BULK_UPLOAD: 20,
+  ALLOWED_IMAGE_TYPES: [
+    "image/jpeg",
+    "image/jpg",
+    "image/png",
+    "image/gif",
+    "image/webp",
+  ],
+  ALLOWED_VIDEO_TYPES: [
+    "video/mp4",
+    "video/mpeg",
+    "video/quicktime",
+    "video/x-msvideo",
+    "video/webm",
+  ],
+};
+
 module.exports = {
   HTTP_STATUS_CODE,
   FILE_CONSTANTS,
   SIGNED_URL_EXPIRY,
+  MEDIA_CONSTANTS,
 };

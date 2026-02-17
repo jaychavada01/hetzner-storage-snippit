@@ -3,6 +3,7 @@ const { HTTP_STATUS_CODE } = require("./config/constants");
 const { checkDBConnection } = require("./config/database");
 const envConfig = require("./config/envConfig");
 const { EXPRESS, CORS, FS } = require("./config/packages");
+const i18n = require("./config/i18n");
 
 // EXPRESS APP SETUP
 const app = EXPRESS();
@@ -12,6 +13,9 @@ const PORT = envConfig.SERVER.PORT || 1338;
 app.use(CORS());
 app.use(EXPRESS.json());
 app.use(EXPRESS.urlencoded({ extended: true }));
+
+// i18n middleware - must be after express middleware
+app.use(i18n.init);
 
 // Create temporary uploads directory if not exists
 const uploadsDir = "/tmp/uploads";

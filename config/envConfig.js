@@ -9,11 +9,11 @@ const envConfig = {
     URL: process.env.DATABASE_URL,
   },
   STORAGE: {
-    ENDPOINT: process.env.HETZNER_ENDPOINT,
-    BUCKET: process.env.HETZNER_BUCKET,
-    ACCESS_KEY: process.env.HETZNER_ACCESS_KEY,
-    SECRET_KEY: process.env.HETZNER_SECRET_KEY,
-    REGION: process.env.HETZNER_REGION,
+    ENDPOINT: process.env.HETZNER_STORAGE_ENDPOINT,
+    BUCKET: process.env.HETZNER_STORAGE_BUCKET,
+    ACCESS_KEY: process.env.HETZNER_STORAGE_ACCESS_KEY,
+    SECRET_KEY: process.env.HETZNER_STORAGE_SECRET_KEY,
+    REGION: process.env.HETZNER_STORAGE_REGION,
   },
 };
 
